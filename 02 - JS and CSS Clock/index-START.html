@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS + CSS Clock</title>
-</head>
-<body>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>JS + CSS Clock</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
 
 
     <div class="clock">
@@ -15,60 +18,80 @@
       </div>
     </div>
 
+    <script>
+      class Clock {
+        constructor() {
+          this._seconds = (new Date()).getSeconds();
+          this._minutes = (new Date()).getMinutes();
+          this._hours = (new Date()).getHours();
 
-  <style>
-    html {
-      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
-      background-size: cover;
-      font-family: 'helvetica neue';
-      text-align: center;
-      font-size: 10px;
-    }
+          this.secondHand = document.querySelector(".second-hand");
+          this.minHand = document.querySelector(".min-hand");
+          this.hourHand = document.querySelector(".hour-hand");
 
-    body {
-      margin: 0;
-      font-size: 2rem;
-      display: flex;
-      flex: 1;
-      min-height: 100vh;
-      align-items: center;
-    }
+          this.clockUpdate();
+          this.continuousTimeUpdate();
+        }
 
-    .clock {
-      width: 30rem;
-      height: 30rem;
-      border: 20px solid white;
-      border-radius: 50%;
-      margin: 50px auto;
-      position: relative;
-      padding: 2rem;
-      box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
-        inset 0 0 0 3px #EFEFEF,
-        inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
-    }
+        initialTimeUpdate() {
+          this.visualClockUpdate();
+        }
 
-    .clock-face {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
-    }
+        continuousTimeUpdate() {
+          const now = new Date();
+          this._seconds = now.getSeconds();
+          this._minutes = now.getMinutes();
+          this._hours = now.getHours();
+          this.clockUpdate();
+          setTimeout(() => { this.continuousTimeUpdate() }, 1000);
+        }
 
-    .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
-      position: absolute;
-      top: 50%;
-    }
+        clockUpdate() {
+          this.updateSecondHand();
+          this.updateMinuteHand();
+          this.updateHourHand();
+        }
 
-  </style>
+        updateSecondHand() {
+          this.secondHand.style.transform = `rotate(${this._seconds * 6}deg)`;
+        }
 
-  <script>
+        updateMinuteHand() {
+          this.minHand.style.transform = `rotate(${this._minutes * 6}deg)`;
+        }
 
+        updateHourHand() {
+          this.hourHand.style.transform = `rotate(${this._hours % 12 * 30}deg)`;
+        }
 
-  </script>
-</body>
+      }
+
+      new Clock();
+      /* function showCurrentTimeInClock() {
+        setInterval(updateClock, 1000);
+        //const todayTime = new Date();
+        //const seconds = todayTime.getSeconds();
+        //updateVisualClock(seconds);
+        //setTimeout(showCurrentTimeInClock, 1000);
+      }
+
+      function updateClock() {
+        const today = new Date();
+        const seconds = today.getSeconds();
+        updateVisualClock(seconds);
+      }
+
+      function updateVisualClock(seconds) {
+        updateSecondHand(seconds);
+        console.log(seconds);
+      }
+      function updateSecondHand(seconds) {
+        document.querySelector(".second-hand").style.transform = `rotate(${seconds * 6}deg)`;
+      }
+
+      showCurrentTimeInClock(); */
+
+    </script>
+  </body>
+
 </html>
