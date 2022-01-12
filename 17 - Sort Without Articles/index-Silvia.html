@@ -47,7 +47,32 @@
 
 <script>
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+const list = document.getElementById("bands");
 
+const removeArticle = (str) => {
+  const articles = ["the", "a", "an"];
+  const strNormalized = str.toLowerCase();
+  const strArray = strNormalized.split(" ");
+  if ( !articles.includes(strArray[0]) ) {
+    return strNormalized;
+  } else {
+    return strArray.slice(1).join(" ");
+  }  
+} 
+
+bands.sort((str1, str2) => {
+  if (removeArticle(str1) < removeArticle(str2)) {
+    return -1;
+  } else if (removeArticle(str1) < removeArticle(str2)) {
+    return 1;
+  } else {
+    return 0
+  }
+});
+
+console.log(bands);
+
+list.innerHTML = bands.map(band => `<li>${band}</li>`).join("");
 
 </script>
 
