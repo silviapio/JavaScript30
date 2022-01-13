@@ -182,26 +182,25 @@
     </li>
   </ul>
 <script>
+  const listItems = document.querySelectorAll("li[data-time]");
+  const durations = Array.from(listItems).map(item => item.dataset.time);
+  let hours, minutes, seconds;
 
-  const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+  const totalSeconds = durations.reduce((acc, duration) => {
+    const toNumbers = duration.split(":").map(n => parseInt(n));
+    const toSeconds = toNumbers[0]*60 + toNumbers[1];
+    return acc += toSeconds;
+  } , 0)
 
-  const seconds = timeNodes
-    .map(node => node.dataset.time)
-    .map(timeCode => {
-      const [mins, secs] = timeCode.split(':').map(parseFloat);
-      return (mins * 60) + secs;
-    })
-    .reduce((total, vidSeconds) => total + vidSeconds);
+  minutes = Math.floor(totalSeconds / 60);
+  seconds = totalSeconds % 60;
 
-    let secondsLeft = seconds;
-    const hours = Math.floor(secondsLeft / 3600);
-    secondsLeft = secondsLeft % 3600;
-
-    const mins = Math.floor(secondsLeft / 60);
-    secondsLeft = secondsLeft % 60;
-
-    console.log(hours, mins, secondsLeft);
-
+  if (minutes >= 60) {
+    hours = Math.floor(minutes / 60);
+    minutes = minutes % 60;
+  }
+  
+  console.log(hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`);
 </script>
 </body>
 </html>
